@@ -103,3 +103,7 @@ def urdfviz(owner=None, repo=None, branch=None, robot=None):
 
 
     return render_template('viz.html', robot_name=robot, mesh_url=mesh_url)
+
+# run the app.
+if __name__ == "__main__":
+    app.run()
