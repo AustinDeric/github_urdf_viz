@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Robot List</title>
+</head>
+<body>
+    <ul id="navigation">
+    {% for item in robots %}
+        <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
