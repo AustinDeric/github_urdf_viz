@@ -6,7 +6,7 @@ from pathlib import PurePath
 import docker
 import time
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 def ros_command(cmd=None):
     return '/bin/bash -c "source /opt/ros/kinetic/setup.bash && {}"'.format(cmd)
@@ -14,7 +14,11 @@ def ros_command(cmd=None):
 def workspace_command(cmd=None):
     return ros_command('source /workspace/devel/setup.bash && {}'.format(cmd))
 
-@app.route('/<owner>/<repo>/<branch>')
+@application.route('/')
+def show_index():
+    return render_template('index.html')
+
+@application.route('/<owner>/<repo>/<branch>')
 def list_robots(owner=None, repo=None, branch=None):
 
     sha_url = 'https://api.github.com/repos/{}/{}/branches/{}'.format(owner, repo, branch)
@@ -40,7 +44,7 @@ def list_robots(owner=None, repo=None, branch=None):
 
     return render_template('list_robots.html', robots=robots)
 
-@app.route('/<owner>/<repo>/<branch>/<robot>')
+@application.route('/<owner>/<repo>/<branch>/<robot>')
 def urdfviz(owner=None, repo=None, branch=None, robot=None):
 
     # web stuff
@@ -106,4 +110,4 @@ def urdfviz(owner=None, repo=None, branch=None, robot=None):
 
 # run the app.
 if __name__ == "__main__":
-    app.run()
+    application.run()
