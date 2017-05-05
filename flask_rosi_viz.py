@@ -19,16 +19,16 @@ def list_robots(owner=None, repo=None, branch=None):
 
     sha_url = 'https://api.github.com/repos/{}/{}/branches/{}'.format(owner, repo, branch)
     r = requests.get(sha_url)
-    print('sha url: ' + r.url)
-    print('sha status code: ' + str(r.status_code))
+    print 'sha url: ' + r.url
+    print 'sha status code: ' + str(r.status_code)
     sha_data = json.loads(r.text)
     sha = sha_data['commit']['sha']
 
     tree_payload = {'recursive': '1'}
     tree_url = 'https://api.github.com/repos/{}/{}/git/trees/{}'.format(owner, repo, sha)
     x = requests.get(tree_url, tree_payload)
-    print('tree url: ' + r.url)
-    print('tree status code: ' + str(x.status_code))
+    print 'tree url: ' + r.url
+    print 'tree status code: ' + str(x.status_code)
     tree_data = json.loads(x.text)
     robots = []
     for i in tree_data['tree']:
@@ -54,8 +54,8 @@ def urdfviz(owner=None, repo=None, branch=None, robot=None):
     tree_payload = {'recursive': '1'}
     tree_url = 'https://api.github.com/repos/{}/{}/git/trees/{}'.format(owner, repo, sha)
     x = requests.get(tree_url, tree_payload)
-    print('tree url: ' + x.url)
-    print('tree status code: ' + str(x.status_code))
+    print 'tree url: ' + x.url
+    print 'tree status code: ' + str(x.status_code)
     tree_data = json.loads(x.text)
     for i in tree_data['tree']:
         if PurePath(i['path']).suffix == '.launch':
@@ -69,37 +69,37 @@ def urdfviz(owner=None, repo=None, branch=None, robot=None):
     client = docker.from_env()
     cont = client.containers.run('rosindustrial/viz:kinetic', ros_command('roslaunch viz.launch'), detach=True, network_mode='host', publish_all_ports=True)
     time.sleep(3)
-    print('----------------')
-    print('ps -ef')
-    print(cont.exec_run(ros_command('ps -ef')))
-    print('----------------')
-    print('rostopic list')
-    print(cont.exec_run(ros_command('rostopic list')))
-    print('----------------')
-    print('mkdir')
-    print(cont.exec_run('mkdir /workspace/src/{}'.format(repo)))
-    print('----------------')
-    print('git clone')
-    print(cont.exec_run('git clone -b {} https://github.com/{}/{} /workspace/src/{}'.format(branch, owner, repo, repo)))
-    print('----------------')
-    print('catkin build')
-    print(cont.exec_run(ros_command('catkin build --workspace /workspace')))
-    print('----------------')
-    print('roslaunch')
+    print '----------------'
+    print 'ps -ef'
+    print cont.exec_run(ros_command('ps -ef'))
+    print '----------------'
+    print 'rostopic list'
+    print cont.exec_run(ros_command('rostopic list'))
+    print '----------------'
+    print 'mkdir'
+    print cont.exec_run('mkdir /workspace/src/{}'.format(repo))
+    print '----------------'
+    print 'git clone'
+    print cont.exec_run('git clone -b {} https://github.com/{}/{} /workspace/src/{}'.format(branch, owner, repo, repo))
+    print '----------------'
+    print 'catkin build'
+    print cont.exec_run(ros_command('catkin build --workspace /workspace'))
+    print '----------------'
+    print 'roslaunch'
     cmd = workspace_command('roslaunch /workspace/src/{}/{}'.format(repo, launch_file_rel_path))
-    print(cont.exec_run(cmd))
-    print('----------------')
-    print('rosparam')
-    print(cont.exec_run(ros_command('rosparam get /robot_description')))
-    print('----------------')
-    print('ps -ef')
-    print(cont.exec_run(ros_command('ps -ef')))
-    print('----------------')
-    print('rostopic list')
-    print(cont.exec_run(ros_command('rostopic list')))
+    print cont.exec_run(cmd)
+    print '----------------'
+    print 'rosparam'
+    print cont.exec_run(ros_command('rosparam get /robot_description'))
+    print '----------------'
+    print 'ps -ef'
+    print cont.exec_run(ros_command('ps -ef'))
+    print '----------------'
+    print 'rostopic list'
+    print cont.exec_run(ros_command('rostopic list'))
 
 
-    print('elapsed time: ' + str(time.time() - t))
+    print 'elapsed time: ' + str(time.time() - t)
 
 
     return render_template('viz.html', robot_name=robot, mesh_url=mesh_url)

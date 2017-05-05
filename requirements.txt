@@ -1,8 +1,10 @@
 appdirs==1.4.3
+backports.ssl-match-hostname==3.5.0.1
 click==6.7
 docker==2.2.1
 docker-pycreds==0.2.1
 Flask==0.12.1
+ipaddress==1.0.18
 itsdangerous==0.24
 Jinja2==2.9.6
 MarkupSafe==1.0
