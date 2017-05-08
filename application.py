@@ -56,14 +56,11 @@ def urdfviz(owner=None, repo=None, branch=None, robot=None):
 
     #docker stuff
     client = docker.from_env()
-    cont = client.containers.run('rosindustrial/viz:kinetic',
-                                 '/bin/bash -c "source /opt/ros/kinetic/setup.bash && roslaunch viz.launch',
-                                 detach=True, network_mode='host', publish_all_ports=True)
-    time.sleep(3)
+    cont = client.containers.run('rosindustrial/viz:kinetic', '/bin/bash -c "source /opt/ros/kinetic/setup.bash && roslaunch viz.launch"', detach=True, network_mode='host', publish_all_ports=True)
     cont.exec_run('mkdir /workspace/src/{}'.format(repo))
     cont.exec_run('git clone -b {} https://github.com/{}/{} /workspace/src/{}'.format(branch, owner, repo, repo))
-    cont.exec_run('/bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin build --workspace /workspace')
-    cmd = '/bin/bash -c "source /opt/ros/kinetic/setup.bash && source /workspace/devel/setup.bash && roslaunch /workspace/src/{}/{}'.format(repo, launch_file_rel_path)
+    cont.exec_run('/bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin build --workspace /workspace"')
+    cmd = '/bin/bash -c "source /opt/ros/kinetic/setup.bash && source /workspace/devel/setup.bash && roslaunch /workspace/src/{}/{}"'.format(repo, launch_file_rel_path)
     cont.exec_run(cmd)
     return render_template('viz.html', robot_name=robot, mesh_url=mesh_url)
 
