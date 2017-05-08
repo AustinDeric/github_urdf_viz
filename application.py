@@ -13,11 +13,8 @@ application = Flask(__name__)
 def root_index():
     return render_template('index.html')
 
-@application.route('/user')
-def list_robots():
-    owner = 'AustinDeric'
-    repo = 'abb_experimental'
-    branch = 'irb1600-dae'
+@application.route('/<owner>/<repo>/<branch>')
+def list_robots(owner=None, repo=None, branch=None):
     sha_url = 'https://api.github.com/repos/{}/{}/branches/{}'.format(owner, repo, branch)
     r = requests.get(sha_url)
     sha_data = json.loads(r.text)
