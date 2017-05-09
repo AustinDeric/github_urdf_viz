@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, url_for
 from flask import render_template
 import requests
 import json
@@ -36,7 +36,7 @@ def list_robots(owner=None, repo=None, branch=None):
         if PurePath(i['path']).suffix == '.launch':
             if ((PurePath(i['path']).stem)[0:5] == 'load_'):
                 robot_name = PurePath(i['path']).stem[5:]
-                new_path = 'localhost:5000/{}/{}/{}/{}'.format(owner, repo, branch, robot_name)
+                new_path = url_for('urdfviz', owner=owner, repo=repo, branch=branch, robot=robot_name)
                 robots.append({'href': new_path, 'caption': robot_name})
 
     return render_template('list_robots.html', robots=robots)
