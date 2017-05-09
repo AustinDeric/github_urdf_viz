@@ -5,6 +5,13 @@ import json
 import time
 import docker
 from pathlib import PurePath
+
+def ros_command(cmd):
+    return '/bin/bash -c "source /opt/ros/kinetic/setup.bash && {}"'.format(cmd)
+
+def workspace_command(cmd):
+    return ros_command('/bin/bash -c "source /workspace/devel/setup.bash && {}"'.format(cmd))
+
 # EB looks for an 'application' callable by default.
 application = Flask(__name__)
 
@@ -57,16 +64,18 @@ def urdfviz(owner=None, repo=None, branch=None, robot=None):
     #docker stuff
     client = docker.from_env()
     port_dict = {'9090/tcp': '9090'}
+    cmds=[]
+    cmds.append('mkdir /workspace/src/{}'.format(repo))
+    cmds.append('git clone -b {} https://github.com/{}/{} /workspace/src/{}'.format(branch, owner, repo, repo))
+    cmds.append(ros_command('roslaunch viz.launch'))
+    cmds.append(ros_command('catkin build --workspace /workspace'))
+    cmds.append(workspace_command('roslaunch /workspace/src/{}/{}'.format(repo, launch_file_rel_path)))
     cont = client.containers.run('rosindustrial/viz:kinetic',
-                                 '/bin/bash -c "source /opt/ros/kinetic/setup.bash && roslaunch viz.launch"',
+                                 cmds,
                                  detach=True,
                                  network_mode='host',
                                  ports=port_dict)
-    cont.exec_run('mkdir /workspace/src/{}'.format(repo))
-    cont.exec_run('git clone -b {} https://github.com/{}/{} /workspace/src/{}'.format(branch, owner, repo, repo))
-    cont.exec_run('/bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin build --workspace /workspace"')
-    cmd = '/bin/bash -c "source /opt/ros/kinetic/setup.bash && source /workspace/devel/setup.bash && roslaunch /workspace/src/{}/{}"'.format(repo, launch_file_rel_path)
-    cont.exec_run(cmd)
+
     return render_template('viz.html', robot_name=robot, mesh_url=mesh_url)
 
 # run the app.
