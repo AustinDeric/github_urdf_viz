@@ -29,7 +29,7 @@ def list_robots(owner=None, repo=None, branch=None):
         if PurePath(i['path']).suffix == '.launch':
             if ((PurePath(i['path']).stem)[0:5] == 'load_'):
                 robot_name = PurePath(i['path']).stem[5:]
-                new_path = 'http://flask-env.uzmxeimfs5.us-west-2.elasticbeanstalk.com/{}/{}/{}/{}'.format(owner, repo, branch, robot_name)
+                new_path = 'localhost:5000/{}/{}/{}/{}'.format(owner, repo, branch, robot_name)
                 robots.append({'href': new_path, 'caption': robot_name})
 
     return render_template('list_robots.html', robots=robots)
@@ -56,7 +56,12 @@ def urdfviz(owner=None, repo=None, branch=None, robot=None):
 
     #docker stuff
     client = docker.from_env()
-    cont = client.containers.run('rosindustrial/viz:kinetic', '/bin/bash -c "source /opt/ros/kinetic/setup.bash && roslaunch viz.launch"', detach=True, network_mode='host', publish_all_ports=True)
+    port_dict = {'9090/tcp': '9090'}
+    cont = client.containers.run('rosindustrial/viz:kinetic',
+                                 '/bin/bash -c "source /opt/ros/kinetic/setup.bash && roslaunch viz.launch"',
+                                 detach=True,
+                                 network_mode='host',
+                                 ports=port_dict)
     cont.exec_run('mkdir /workspace/src/{}'.format(repo))
     cont.exec_run('git clone -b {} https://github.com/{}/{} /workspace/src/{}'.format(branch, owner, repo, repo))
     cont.exec_run('/bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin build --workspace /workspace"')
