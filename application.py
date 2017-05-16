@@ -1,16 +1,14 @@
-from flask import Flask, url_for
-from flask import render_template
+from flask import Flask, url_for, render_template
 import requests
 import json
-import time
-import docker
 from pathlib import PurePath
+import random
 
-def ros_command(cmd):
-    return '/bin/bash -c "source /opt/ros/kinetic/setup.bash && {}"'.format(cmd)
+#def ros_command(cmd):
+#    return '/bin/bash -c "source /opt/ros/kinetic/setup.bash && {}"'.format(cmd)
 
-def workspace_command(cmd):
-    return ros_command('/bin/bash -c "source /workspace/devel/setup.bash && {}"'.format(cmd))
+#def workspace_command(cmd):
+#    return ros_command('/bin/bash -c "source /workspace/devel/setup.bash && {}"'.format(cmd))
 
 # EB looks for an 'application' callable by default.
 application = Flask(__name__)
@@ -18,7 +16,20 @@ application = Flask(__name__)
 # add a rule for the index page.
 @application.route('/')
 def root_index():
+    '''
+    owner_names = ['AustinDeric', 'Jmeyer1292', 'gavanderhoorn', 'geoffreychiou', 'Levi-Armstrong', 'shaun-edwards', 'VictorLamoine']
+    owner = {}
+    for i in owner_names:
+        owner['owner_name']= i
+        owner['owner_name'] = i
+    '''
     return render_template('index.html')
+
+
+# add a rule for the index page.
+#@application.route('/<owner>')
+#def owner_page(owner=None):
+
 
 @application.route('/<owner>/<repo>/<branch>')
 def list_robots(owner=None, repo=None, branch=None):
@@ -44,7 +55,7 @@ def list_robots(owner=None, repo=None, branch=None):
 @application.route('/<owner>/<repo>/<branch>/<robot>')
 def urdfviz(owner=None, repo=None, branch=None, robot=None):
 
-    # web stuff
+    # find mesh url to load
     sha_url = 'https://api.github.com/repos/{}/{}/branches/{}'.format(owner, repo, branch)
     r = requests.get(sha_url)
     sha_data = json.loads(r.text)
@@ -60,21 +71,10 @@ def urdfviz(owner=None, repo=None, branch=None, robot=None):
                 if PurePath(i['path']).stem[5:] == robot:
                     launch_file_rel_path = i['path']
     mesh_url = 'https://raw.githubusercontent.com/{}/{}/{}/'.format(owner, repo, branch)
+    #generate random port
+    port = random.uniform(1, 10)
 
-    #docker stuff
-    client = docker.from_env()
-    port_dict = {'9090/tcp': '9090'}
-    cmds=[]
-    cmds.append('mkdir /workspace/src/{}'.format(repo))
-    cmds.append('git clone -b {} https://github.com/{}/{} /workspace/src/{}'.format(branch, owner, repo, repo))
-    cmds.append(ros_command('roslaunch viz.launch'))
-    cmds.append(ros_command('catkin build --workspace /workspace'))
-    cmds.append(workspace_command('roslaunch /workspace/src/{}/{}'.format(repo, launch_file_rel_path)))
-    cont = client.containers.run('rosindustrial/viz:kinetic',
-                                 cmds,
-                                 detach=True,
-                                 network_mode='host',
-                                 ports=port_dict)
+    #container commands
 
     return render_template('viz.html', robot_name=robot, mesh_url=mesh_url)
 
