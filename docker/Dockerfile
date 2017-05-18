@@ -1,5 +1,9 @@
 # rosindustrial/viz:kinetic
 FROM rosindustrial/webtools:kinetic
-MAINTAINER Austin.Deric@gmail.com
+LABEL maintainer "Austin.Deric@gmail.com"
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 RUN mkdir -p /workspace/src
-COPY viz.launch /
+COPY launch_maker.py /
+ENTRYPOINT []
+CMD []
+

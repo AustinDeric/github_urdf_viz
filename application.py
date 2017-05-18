@@ -4,12 +4,6 @@ import json
 from pathlib import PurePath
 import random
 
-#def ros_command(cmd):
-#    return '/bin/bash -c "source /opt/ros/kinetic/setup.bash && {}"'.format(cmd)
-
-#def workspace_command(cmd):
-#    return ros_command('/bin/bash -c "source /workspace/devel/setup.bash && {}"'.format(cmd))
-
 # EB looks for an 'application' callable by default.
 application = Flask(__name__)
 
@@ -74,7 +68,7 @@ def urdfviz(owner=None, repo=None, branch=None, robot=None):
     #generate random port
     port = random.uniform(1, 10)
 
-    #container commands
+
 
     return render_template('viz.html', robot_name=robot, mesh_url=mesh_url)
 

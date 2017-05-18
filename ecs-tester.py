@@ -1,5 +1,6 @@
 import boto3
 from datetime import datetime
+import json
 import sys
 
 def ros_command(cmd):
@@ -11,15 +12,21 @@ def workspace_command(cmd):
 owner = 'AustinDeric'
 repo = 'abb_experimental'
 branch = 'irb1600-dae'
-launch_file_rel_path = 'abb_irb1600_support/launch/load_irb1600_6_12.launch'
+package = 'abb_irb1600_support'
+launch_file = 'load_irb1600_6_12.launch'
 
-cmds = []
-cmds.append('/viz_entrypoint.sh')
-cmds.append('git clone -b {} https://github.com/{}/{} /workspace/src/{}'.format(branch, owner, repo, repo))
-cmds.append(ros_command('catkin build --workspace /workspace'))
-cmds.append(workspace_command('roslaunch /workspace/src/{}/{}'.format(repo, launch_file_rel_path)))
+# docker stuff
+#cmds = []
+#cmds.append('git clone -b {} https://github.com/{}/{} /workspace/src/{}'.format(branch, owner, repo, repo))
+#cmds.append('catkin build --workspace /workspace')
+#cmds.append('source /workspace/devel/setup.bash')
+#cmds.append('python2 launch_maker.py {} {}'.format(package, launch_file))
+#cmds.append('roslaunch viz.launch')
+#cmd = '{} && {} && {} && {} && {}'.format(cmds[0], cmds[1], cmds[2], cmds[3], cmds[4])
 print 'commands: '
-print cmds
+#cmd = '/bin/bash','-c','source','/opt/ros/kinetic/setup.bash','&&','git','clone','-b','irb1600-dae','https://github.com/AustinDeric/abb_experimental','/workspace/src/abb_experimental','&&','catkin','build','--workspace','/workspace','&&','source','/workspace/devel/setup.bash','&&','python2','launch_maker.py','abb_irb1600_support','load_irb1600_6_12.launch','&&','roslaunch','viz.launch'
+cmd = ['/bin/bash','-c','source /opt/ros/kinetic/setup.bash && git clone -b irb1600-dae https://github.com/AustinDeric/abb_experimental /workspace/src/abb_experimental && catkin build --workspace /workspace && source /workspace/devel/setup.bash && python2 launch_maker.py abb_irb1600_support load_irb1600_6_12.launch && roslaunch viz.launch']
+print cmd
 
 #ECS setup
 family = 'viz-backend-task'
@@ -37,11 +44,8 @@ containerDefinitions = [{
                             },
                         ],
                         'essential': True,
-                        'command': cmds,
-                        'logConfiguration':
-                            {
-                                'logDriver': 'json-file'
-                            }
+                        'command': cmd,
+                        'entryPoint': []
                         }]
 
 
