@@ -1,13 +1,6 @@
 import boto3
 from datetime import datetime
-import json
 import sys
-
-def ros_command(cmd):
-    return '/bin/bash -c "source /opt/ros/kinetic/setup.bash && {}"'.format(cmd)
-
-def workspace_command(cmd):
-    return ros_command('/bin/bash -c "source /workspace/devel/setup.bash && {}"'.format(cmd))
 
 owner = 'AustinDeric'
 repo = 'abb_experimental'
@@ -16,16 +9,8 @@ package = 'abb_irb1600_support'
 launch_file = 'load_irb1600_6_12.launch'
 
 # docker stuff
-#cmds = []
-#cmds.append('git clone -b {} https://github.com/{}/{} /workspace/src/{}'.format(branch, owner, repo, repo))
-#cmds.append('catkin build --workspace /workspace')
-#cmds.append('source /workspace/devel/setup.bash')
-#cmds.append('python2 launch_maker.py {} {}'.format(package, launch_file))
-#cmds.append('roslaunch viz.launch')
-#cmd = '{} && {} && {} && {} && {}'.format(cmds[0], cmds[1], cmds[2], cmds[3], cmds[4])
+cmd = ['/bin/bash','-c','source /opt/ros/kinetic/setup.bash && git clone -b {} https://github.com/{}/{} /workspace/src/{} && catkin build --workspace /workspace && source /workspace/devel/setup.bash && python2 launch_maker.py {} {} && roslaunch viz.launch'.format(branch, owner, repo, repo, package, launch_file)]
 print 'commands: '
-#cmd = '/bin/bash','-c','source','/opt/ros/kinetic/setup.bash','&&','git','clone','-b','irb1600-dae','https://github.com/AustinDeric/abb_experimental','/workspace/src/abb_experimental','&&','catkin','build','--workspace','/workspace','&&','source','/workspace/devel/setup.bash','&&','python2','launch_maker.py','abb_irb1600_support','load_irb1600_6_12.launch','&&','roslaunch','viz.launch'
-cmd = ['/bin/bash','-c','source /opt/ros/kinetic/setup.bash && git clone -b irb1600-dae https://github.com/AustinDeric/abb_experimental /workspace/src/abb_experimental && catkin build --workspace /workspace && source /workspace/devel/setup.bash && python2 launch_maker.py abb_irb1600_support load_irb1600_6_12.launch && roslaunch viz.launch']
 print cmd
 
 #ECS setup
