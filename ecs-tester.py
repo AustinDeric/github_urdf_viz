@@ -19,7 +19,7 @@ family = 'viz-backend-task'
 containerDefinitions = [{
                         'name': 'viz-backend',
                         'image': '637630236727.dkr.ecr.us-west-2.amazonaws.com/rosindustrial/viz:latest',
-                        'cpu': 512,
+                        'cpu': 1024,
                         'memory': 300,
                         'portMappings': [
                             {

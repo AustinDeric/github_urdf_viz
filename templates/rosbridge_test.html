@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+
+<script type="text/javascript" src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+<script type="text/javascript" src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+
+<script type="text/javascript" type="text/javascript">
+  // Connecting to ROS
+  // -----------------
+
+  var ros = new ROSLIB.Ros({
+    url : 'ws://52.89.93.213:9090'
+  });
+
+  ros.on('connection', function() {
+    console.log('Connected to websocket server.');
+  });
+
+  ros.on('error', function(error) {
+    console.log('Error connecting to websocket server: ', error);
+  });
+
+  ros.on('close', function() {
+    console.log('Connection to websocket server closed.');
+  });
+
+  // Getting and setting a param value
+  // ---------------------------------
+
+  ros.getParams(function(params) {
+    console.log(params);
+  });
+
+  var test_param = new ROSLIB.Param({
+    ros : ros,
+    name : 'test_param'
+  });
+
+  test_param.set(1);
+  test_param.get(function(value) {
+    console.log('test_param: ' + value);
+  });
+</script>
+</head>
+
+<body>
+  <h1>ROS-Industrial Test Script</h1>
+  <p>Diagnostics are in Web Console.</p>
+</body>
+</html>
