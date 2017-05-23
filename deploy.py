@@ -30,7 +30,7 @@ def ecs_deploy(cmd):
                             }]
 
 
-    client = boto3.client('ecs')
+    client = boto3.client('ecs', region_name='us-west-2')
 
     register_response = client.register_task_definition(family=family,
                                                containerDefinitions=containerDefinitions)
