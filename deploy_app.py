@@ -14,10 +14,6 @@ cmd = ['/bin/bash','-cl',
              'source /workspace/devel/setup.bash && '
              'python2 launch_maker.py {} {} && '
              'roslaunch viz.launch'.format(branch, owner, repo, repo, package, package, launch_file)]
-'''
-cmd = ['/bin/bash','-c',
-       'source /opt/ros/kinetic/setup.bash && '
-             'roslaunch rosbridge_server rosbridge_websocket.launch']
-'''
-deploy.local_deploy(cmd=cmd)
+
+deploy.localdeploy(cmd=cmd)
 deploy.ecs_deploy(cmd=cmd)

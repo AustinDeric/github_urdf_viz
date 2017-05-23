@@ -6,7 +6,7 @@ import random
 
 def ecs_deploy(cmd):
 
-    port = int(random.uniform(100, 65000))
+    port = int(random.uniform(3000, 30000))
     print 'port: ' + str(port)
 
     family = 'viz-backend-task'
@@ -19,7 +19,7 @@ def ecs_deploy(cmd):
                             'portMappings': [
                                 {
                                     'containerPort': 9090,
-                                    'hostPort': 9090,
+                                    'hostPort': port,
                                     'protocol': 'tcp'
                                 },
                             ],
@@ -67,6 +67,7 @@ def ecs_deploy(cmd):
 
     print 'start response: '
     print start_response
+    return port
 
 def local_deploy(cmd):
     client = docker.from_env()
