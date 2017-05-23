@@ -15,7 +15,7 @@ def ecs_deploy(cmd):
                             'name': 'viz-backend',
                             'image': '637630236727.dkr.ecr.us-west-2.amazonaws.com/rosindustrial/viz:debug',
                             'cpu': 1024,
-                            'memory': 2000,
+                            'memory': 3000,
                             'portMappings': [
                                 {
                                     'containerPort': 9090,
