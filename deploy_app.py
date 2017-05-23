@@ -10,10 +10,10 @@ launch_file = 'load_irb1600_6_12.launch'
 cmd = ['/bin/bash','-cl',
        'source /opt/ros/kinetic/setup.bash && '
              'git clone -b {} https://github.com/{}/{} /workspace/src/{} && '
-             'catkin build {} --workspace /workspace && '
+             'catkin build --workspace /workspace && '
              'source /workspace/devel/setup.bash && '
              'python2 launch_maker.py {} {} && '
-             'roslaunch viz.launch'.format(branch, owner, repo, repo, package, package, launch_file)]
+             'roslaunch viz.launch'.format(branch, owner, repo, repo, package, launch_file)]
 
 deploy.localdeploy(cmd=cmd)
 deploy.ecs_deploy(cmd=cmd)
