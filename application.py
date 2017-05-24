@@ -98,8 +98,8 @@ def urdfviz(owner=None, repo=None, branch=None, robot=None):
 
     print 'command:'
     print cmd
-    #time.sleep(25)
-    url_ros_backend = deploy.fake_deploy(cmd=cmd)
+    time.sleep(15)
+    url_ros_backend = deploy.ecs_deploy(cmd=cmd)
 
     return render_template('viz.html',
                            robot_name=robot, mesh_url=mesh_url,
