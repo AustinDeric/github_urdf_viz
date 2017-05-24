@@ -4,7 +4,7 @@ import sys
 import docker
 import random
 
-def ecs_deploy(cmd):
+def ecs_deploy(cmd=None):
 
     port = int(random.uniform(3000, 30000))
     print 'port: ' + str(port)
@@ -67,10 +67,21 @@ def ecs_deploy(cmd):
 
     print 'start response: '
     print start_response
-    return port
+    return 'ws://34.210.216.142:{}'.format(port)
 
-def local_deploy(cmd):
+def local_deploy(cmd=None):
     client = docker.from_env()
+    port = 9090
+    print 'port: ' + str(port)
+
     print client.containers.run('637630236727.dkr.ecr.us-west-2.amazonaws.com/rosindustrial/viz:debug', cmd,
                                 detach=True,
-                                network_mode='host', ports={'9090/tcp': 9090})
+                                network_mode='host', ports={'9090/tcp': port})
+
+    return 'ws://localhost:{}'.format(port)
+
+
+def fake_deploy(cmd=None):
+    port = 9090
+    print 'port: ' + str(port)
+    return 'ws://localhost:{}'.format(port)

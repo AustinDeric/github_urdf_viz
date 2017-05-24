@@ -1,19 +1,22 @@
 import deploy
 
-owner = 'AustinDeric'
-repo = 'abb_experimental'
-branch = 'irb1600-dae'
-package = 'abb_irb1600_support'
-launch_file = 'load_irb1600_6_12.launch'
+owner = 'ros-industrial'
+repo = 'abb'
+branch = 'kinetic-devel'
+package = 'abb_irb6600_support'
+launch_file = 'load_irb6600_225_255.launch'
 
 # docker stuff
-cmd = ['/bin/bash','-cl',
+cmd = ['/bin/bash', '-c',
        'source /opt/ros/kinetic/setup.bash && '
-             'git clone -b {} https://github.com/{}/{} /workspace/src/{} && '
-             'catkin build --workspace /workspace && '
-             'source /workspace/devel/setup.bash && '
-             'python2 launch_maker.py {} {} && '
-             'roslaunch viz.launch'.format(branch, owner, repo, repo, package, launch_file)]
+       'git clone -b {} https://github.com/{}/{} /workspace/src/{} && '
+       'catkin build --workspace /workspace && '
+       'source /workspace/devel/setup.bash && '
+       'python2 launch_maker.py {} {} && '
+       'roslaunch viz.launch'.format(branch, owner, repo, repo,
+                                     package, launch_file)]
 
-deploy.localdeploy(cmd=cmd)
-deploy.ecs_deploy(cmd=cmd)
+print 'cmd:'
+print cmd
+print 'end point: ' + 'localhost:5000/owner/'
+print deploy.local_deploy(cmd=cmd)

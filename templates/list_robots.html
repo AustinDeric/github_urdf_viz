@@ -4,6 +4,7 @@
     <title>Robot List</title>
 </head>
 <body>
+    <p>This end-point scans the repo for robots</p>
     <ul id="navigation">
     {% for item in robots %}
         <li><a href="{{ item.href }}">{{ item.caption }}</a></li>

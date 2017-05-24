@@ -2,6 +2,8 @@
 __pycache__/
 venv/
 
+*.pyc
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

@@ -54,14 +54,14 @@
       ros : ros,
       tfClient : tfClient,
       path : '{{ mesh_url }}',
-      rootObject : viewer.scene
+      rootObject : viewer.scene,
+      loader : '{{ mesh_type }}'
     });
     
     var jsp = new JOINTSTATEPUBLISHER.JointStatePublisher({
       ros : ros,
       divID : 'sliders'
     });
-
 
   }
 
@@ -81,6 +81,8 @@
     </div>
   </div>
   <div class="panel panel-default">
+    <p>Github Repo:</p>
+    <p><a href="{{ github_url }}"> {{ github_url }}</a></p>
     <p>Mesh Files From:</p>
     <p>{{ mesh_url }}</p>
     <p>ROS Backend:</p>
