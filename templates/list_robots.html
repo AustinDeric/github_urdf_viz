@@ -4,6 +4,7 @@
     <title>Robot List</title>
 </head>
 <body>
+    <p>This page lists the robots in the url endpoint</p>
     <ul id="navigation">
     {% for item in robots %}
         <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
