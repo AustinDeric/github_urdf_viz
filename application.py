@@ -58,6 +58,15 @@ def urdfviz(owner=None, repo=None, branch=None, robot=None):
                     print 'launch_file: ' + launch_file
                     package = PurePath(i['path']).parts[0]
                     print 'package: ' + package
+        # find launch folder in packages
+        if len(PurePath(i['path']).parts) > 3:
+            if PurePath(i['path']).parts[1] == 'meshes':
+                if PurePath(i['path']).parts[2] == robot:
+                    if PurePath(i['path']).parts[3] == 'visual':
+                        if PurePath(i['path']).suffix == '.stl':
+                            mesh_type = 'THREE.STLLoader'
+                        if PurePath(i['path']).suffix == '.dae':
+                            mesh_type = 'ROS3D.COLLADA_LOADER_2'
 
     #add package failure message
     if not package:
@@ -82,7 +91,8 @@ def urdfviz(owner=None, repo=None, branch=None, robot=None):
                            robot_name=robot,
                            mesh_url=mesh_url,
                            launch_file=launch_file,
-                           url_ros_backend=url_ros_backend)
+                           url_ros_backend=url_ros_backend,
+                           mesh_type=mesh_type)
 
 @application.route('/test')
 def test_url():

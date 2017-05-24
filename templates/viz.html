@@ -54,7 +54,8 @@
       ros : ros,
       tfClient : tfClient,
       path : '{{ mesh_url }}',
-      rootObject : viewer.scene
+      rootObject : viewer.scene,
+      loader: '{{ mesh_type }}'
     });
     
     var jsp = new JOINTSTATEPUBLISHER.JointStatePublisher({
