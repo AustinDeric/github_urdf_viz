@@ -85,7 +85,7 @@ def urdfviz(owner=None, repo=None, branch=None, robot=None):
 
     port = deploy.ecs_deploy(cmd=cmd)
 
-    time.sleep(25)
+    time.sleep(20)
     url_ros_backend = 'ws://34.210.216.142:{}'.format(port)
     return render_template('viz.html',
                            robot_name=robot,
