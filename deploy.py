@@ -71,6 +71,12 @@ def ecs_deploy(cmd):
 
 def local_deploy(cmd):
     client = docker.from_env()
+    port = 9090
     print client.containers.run('637630236727.dkr.ecr.us-west-2.amazonaws.com/rosindustrial/viz:debug', cmd,
                                 detach=True,
-                                network_mode='host', ports={'9090/tcp': 9090})
+                                network_mode='host', ports={'9090/tcp': port})
+    return port
+
+def fake_deploy(cmd):
+    port = 9090
+    return port

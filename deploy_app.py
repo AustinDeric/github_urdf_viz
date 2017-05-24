@@ -14,6 +14,6 @@ cmd = ['/bin/bash','-cl',
              'source /workspace/devel/setup.bash && '
              'python2 launch_maker.py {} {} && '
              'roslaunch viz.launch'.format(branch, owner, repo, repo, package, launch_file)]
+print 'cmd'
 print cmd
 deploy.local_deploy(cmd=cmd)
-deploy.ecs_deploy(cmd=cmd)
