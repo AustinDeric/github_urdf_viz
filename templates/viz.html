@@ -55,7 +55,7 @@
       tfClient : tfClient,
       path : '{{ mesh_url }}',
       rootObject : viewer.scene,
-      loader: '{{ mesh_type }}'
+      loader: {{ mesh_type }}
     });
     
     var jsp = new JOINTSTATEPUBLISHER.JointStatePublisher({
