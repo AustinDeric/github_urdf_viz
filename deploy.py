@@ -72,11 +72,28 @@ def ecs_deploy(cmd):
 def local_deploy(cmd):
     client = docker.from_env()
     port = 9090
-    print client.containers.run('637630236727.dkr.ecr.us-west-2.amazonaws.com/rosindustrial/viz:debug', cmd,
+    print client.containers.run('637630236727.dkr.ecr.us-west-2.amazonaws.com/rosindustrial/viz:debug',
+                                cmd,
                                 detach=True,
-                                network_mode='host', ports={'9090/tcp': port})
+                                network_mode='host',
+                                ports={'9090/tcp': port})
     return port
 
 def fake_deploy(cmd):
     port = 9090
     return port
+
+def local_build(branch, owner, repo, package, launch_file):
+    repo.remote()
+    client = docker.from_env()
+    cmd = ['/bin/bash', '-cl',
+           'source /opt/ros/kinetic/setup.bash && '
+           'git clone -b {} https://github.com/{}/{} /workspace/src/{} && '
+           'catkin build --workspace /workspace && '
+           'python2 launch_maker.py {} {}'.format(branch, owner, repo, repo, package, launch_file)]
+    print cmd
+    print client.containers.run('637630236727.dkr.ecr.us-west-2.amazonaws.com/rosindustrial/viz:debug',
+                                cmd,
+                                detach=True,
+                                network_mode='host')
+    return hash

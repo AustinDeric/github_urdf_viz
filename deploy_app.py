@@ -1,10 +1,10 @@
 import deploy
 
-owner = 'AustinDeric'
+owner = 'gavanderhoorn'
 repo = 'abb_experimental'
-branch = 'irb1600-dae'
-package = 'abb_irb1600_support'
-launch_file = 'load_irb1600_6_12.launch'
+branch = 'irb52_mention_variants'
+package = ' abb_irb52_support'
+launch_file = 'load_irb52_7_145.launch'
 
 # docker stuff
 cmd = ['/bin/bash','-cl',
@@ -16,4 +16,4 @@ cmd = ['/bin/bash','-cl',
              'roslaunch viz.launch'.format(branch, owner, repo, repo, package, launch_file)]
 print 'cmd'
 print cmd
-deploy.local_deploy(cmd=cmd)
+deploy.fake_deploy(cmd=cmd)

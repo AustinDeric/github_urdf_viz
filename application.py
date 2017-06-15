@@ -8,6 +8,8 @@ import time
 
 # EB looks for an 'application' callable by default.
 application = Flask(__name__)
+#app.config['SECRET_KEY'] = 'secret!'
+#socketio = SocketIO(app)
 
 # add a rule for the index page.
 @application.route('/')
